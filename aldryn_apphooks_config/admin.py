@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, print_function, unicode_literals
-
 import copy
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -40,7 +37,7 @@ class BaseAppHookConfig(AppDataModelAdmin):
             return self.readonly_fields
 
 
-class ModelAppHookConfig(object):
+class ModelAppHookConfig:
     app_config_attribute = 'app_config'
     app_config_selection_title = _('Select app config')
     app_config_selection_desc = _('Select the app config for the new object')
@@ -108,7 +105,7 @@ class ModelAppHookConfig(object):
                     {'fields': (self.app_config_attribute, ),
                      'description': _(self.app_config_selection_desc)}),
         else:
-            return super(ModelAppHookConfig, self).get_fieldsets(request, obj)
+            return super().get_fieldsets(request, obj)
 
     def get_config_data(self, request, obj, name):
         """
@@ -146,7 +143,7 @@ class ModelAppHookConfig(object):
         If only one namespace exists, the current is selected and the normal form
         is used.
         """
-        form = super(ModelAppHookConfig, self).get_form(request, obj, **kwargs)
+        form = super().get_form(request, obj, **kwargs)
         if self.app_config_attribute not in form.base_fields:
             return form
         app_config_default = self._app_config_select(request, obj)

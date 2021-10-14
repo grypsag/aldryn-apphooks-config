@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, print_function, unicode_literals
-
 from django.db.models import Manager
 from django.db.models.query import QuerySet
 
@@ -8,7 +5,7 @@ from ..utils import get_apphook_field_names
 from django.utils.translation import gettext
 
 
-class QuerySetMixin(object):
+class QuerySetMixin:
 
     def namespace(self, namespace, to=None):
         """
@@ -43,12 +40,12 @@ class QuerySetMixin(object):
             if not to:
                 to = fields[0]
 
-        lookup = '{0}__namespace'.format(to)
+        lookup = '{}__namespace'.format(to)
         kwargs = {lookup: namespace}
         return self.filter(**kwargs)
 
 
-class ManagerMixin(object):
+class ManagerMixin:
 
     def namespace(self, namespace, to=None):
         return self.get_queryset().namespace(namespace, to=to)

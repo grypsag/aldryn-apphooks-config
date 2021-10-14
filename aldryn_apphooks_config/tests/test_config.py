@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, print_function, unicode_literals
-
 import os.path
 from copy import deepcopy
 
@@ -101,16 +98,16 @@ class AppHookConfigTestCase(BaseTestCase):
 
     def test_config_str(self):
         app = apphook_pool.get_apphook(self.page_1.application_urls)
-        self.assertEqual('%s / %s' % (force_str(app.name), self.ns_app_1.namespace), force_str(self.ns_app_1))
+        self.assertEqual('{} / {}'.format(force_str(app.name), self.ns_app_1.namespace), force_str(self.ns_app_1))
 
     def test_admin_url(self):
         app = apphook_pool.get_apphook(self.page_1.application_urls)
         url = app.get_config_add_url()
         try:
-            self.assertEqual(url, reverse('admin:%s_%s_add' % (ExampleConfig._meta.app_label,
+            self.assertEqual(url, reverse('admin:{}_{}_add'.format(ExampleConfig._meta.app_label,
                                                                ExampleConfig._meta.model_name)))
         except AttributeError:  # noqa
-            self.assertEqual(url, reverse('admin:%s_%s_add' % (ExampleConfig._meta.app_label,
+            self.assertEqual(url, reverse('admin:{}_{}_add'.format(ExampleConfig._meta.app_label,
                                                                ExampleConfig._meta.module_name)))
 
     def test_app_1_list_empty(self):
@@ -180,9 +177,9 @@ class AppHookConfigTestCase(BaseTestCase):
                             slug='news_2_app_1_config2',
                             section=self.ns_app_1,
                             config=ans_config_2)
-        msg = ('"{0}" has {1} relations to an ApphookConfig model.'
+        msg = ('"{}" has {} relations to an ApphookConfig model.'
                ' Please, specify which one to use in argument "to".'
-               ' Choices are: {2}'.format('News', '2', 'section, config'))
+               ' Choices are: {}'.format('News', '2', 'section, config'))
         self.assertRaisesMessage(
             ValueError, msg, News.objects.namespace, ans_config_1.namespace
         )
@@ -380,9 +377,9 @@ class AppHookConfigTestCase(BaseTestCase):
         response = admin_instance.add_view(request)
         self.assertContains(response, '$(this).apphook_reload_admin')
         self.assertContains(response, 'aldryn_apphooks_config')
-        self.assertRegexpMatches(
+        self.assertRegex(
             force_str(response.content),
-            '(<option value="1" selected="selected">%s</option>|<option value="1" selected>%s</option>)' % (
+            '(<option value="1" selected="selected">{}</option>|<option value="1" selected>{}</option>)'.format(
                 self.ns_app_1, self.ns_app_1
             )
         )
@@ -392,7 +389,7 @@ class AppHookConfigTestCase(BaseTestCase):
         self.ns_app_1.save()
         response = admin_instance.add_view(request)
         response.render()
-        self.assertRegexpMatches(
+        self.assertRegex(
             force_str(response.content),
             '(checked id="id_published"|id="id_published" checked|<input checked="checked" id="id_published")'
         )
@@ -431,7 +428,7 @@ class AppHookConfigTestCase(BaseTestCase):
         self.assertEqual(field_names, ['section'])
 
         field_names = get_apphook_field_names(News)
-        self.assertEqual(set(field_names), set(['config', 'section']))
+        self.assertEqual(set(field_names), {'config', 'section'})
 
         field_names = get_apphook_field_names(NotApphookedModel)
         self.assertEqual(field_names, [])
@@ -444,7 +441,7 @@ class AppHookConfigTestCase(BaseTestCase):
         self.assertEqual(field_names, ['section'])
 
         field_names = get_apphook_field_names(News())
-        self.assertEqual(set(field_names), set(['config', 'section']))
+        self.assertEqual(set(field_names), {'config', 'section'})
 
         field_names = get_apphook_field_names(NotApphookedModel())
         self.assertEqual(field_names, [])
@@ -460,7 +457,7 @@ class AppHookConfigTestCase(BaseTestCase):
 
         obj = News(section=self.ns_app_1, config=self.ns_app_3)
         configs = get_apphook_configs(obj)
-        self.assertEqual(set(configs), set([self.ns_app_1, self.ns_app_3]))
+        self.assertEqual(set(configs), {self.ns_app_1, self.ns_app_3})
 
         obj = NotApphookedModel()
         configs = get_apphook_configs(obj)

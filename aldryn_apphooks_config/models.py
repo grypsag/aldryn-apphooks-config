@@ -1,14 +1,9 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, print_function, unicode_literals
-
 from django.db import models
 
 from app_data import AppDataField
-from six import python_2_unicode_compatible
 from django.utils.translation import gettext_lazy as _
 
 
-@python_2_unicode_compatible
 class AppHookConfig(models.Model):
     """
     This is the generic (abstract) model that holds the configurations for each AppHookConfig
@@ -35,15 +30,15 @@ class AppHookConfig(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        self.type = '%s.%s' % (
+        self.type = '{}.{}'.format(
             self.__class__.__module__, self.__class__.__name__)
-        super(AppHookConfig, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         if self.cmsapp:
-            return '%s / %s' % (self.cmsapp.name, self.namespace)
+            return '{} / {}'.format(self.cmsapp.name, self.namespace)
         else:
-            return '%s / %s' % (self.type, self.namespace)
+            return '{} / {}'.format(self.type, self.namespace)
 
     def __getattr__(self, item):
         """

@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, print_function, unicode_literals
-
 HELPER_SETTINGS = dict(
     TIME_ZONE='Europe/Zurich',
     LANGUAGES=(

@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, print_function, unicode_literals
-
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 
@@ -20,8 +17,8 @@ class CMSConfigApp(CMSApp):
 
     def get_config_add_url(self):
         try:
-            return reverse('admin:%s_%s_add' % (self.app_config._meta.app_label,
+            return reverse('admin:{}_{}_add'.format(self.app_config._meta.app_label,
                                                 self.app_config._meta.model_name))
         except AttributeError:  # pragma: no cover
-            return reverse('admin:%s_%s_add' % (self.app_config._meta.app_label,
+            return reverse('admin:{}_{}_add'.format(self.app_config._meta.app_label,
                                                 self.app_config._meta.module_name))
