@@ -8,7 +8,6 @@ from django.conf import settings
 from django.http import SimpleCookie
 from django.template import RequestContext, Template
 from django.urls import reverse
-from django.utils.encoding import force_text
 from django.utils.six import StringIO
 
 from cms import api
@@ -21,6 +20,7 @@ from ..utils import get_app_instance, get_apphook_configs, get_apphook_field_nam
 from .utils.example.models import (
     AnotherExampleConfig, Article, ExampleConfig, News, NotApphookedModel, TranslatableArticle,
 )
+from django.utils.encoding import force_str
 
 
 class AppHookConfigTestCase(BaseTestCase):
@@ -101,7 +101,7 @@ class AppHookConfigTestCase(BaseTestCase):
 
     def test_config_str(self):
         app = apphook_pool.get_apphook(self.page_1.application_urls)
-        self.assertEqual('%s / %s' % (force_text(app.name), self.ns_app_1.namespace), force_text(self.ns_app_1))
+        self.assertEqual('%s / %s' % (force_str(app.name), self.ns_app_1.namespace), force_str(self.ns_app_1))
 
     def test_admin_url(self):
         app = apphook_pool.get_apphook(self.page_1.application_urls)
@@ -381,7 +381,7 @@ class AppHookConfigTestCase(BaseTestCase):
         self.assertContains(response, '$(this).apphook_reload_admin')
         self.assertContains(response, 'aldryn_apphooks_config')
         self.assertRegexpMatches(
-            force_text(response.content),
+            force_str(response.content),
             '(<option value="1" selected="selected">%s</option>|<option value="1" selected>%s</option>)' % (
                 self.ns_app_1, self.ns_app_1
             )
@@ -393,7 +393,7 @@ class AppHookConfigTestCase(BaseTestCase):
         response = admin_instance.add_view(request)
         response.render()
         self.assertRegexpMatches(
-            force_text(response.content),
+            force_str(response.content),
             '(checked id="id_published"|id="id_published" checked|<input checked="checked" id="id_published")'
         )
 

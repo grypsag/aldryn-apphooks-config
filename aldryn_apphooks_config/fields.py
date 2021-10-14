@@ -4,9 +4,9 @@ from __future__ import absolute_import, print_function, unicode_literals
 from django import forms
 from django.db import models
 from django.db.models import CASCADE
-from django.utils.translation import ugettext_lazy as _
 
 from .widgets import AppHookConfigWidget
+from django.utils.translation import gettext_lazy as _
 
 
 class AppHookConfigFormField(forms.ModelChoiceField):
